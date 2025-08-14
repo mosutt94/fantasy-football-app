@@ -1,0 +1,93 @@
+/**
+ * PositionFilters Component Styles
+ */
+
+.position-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-label {
+  font-weight: 500;
+  color: #475569;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.position-buttons {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.position-button {
+  padding: 6px 12px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  color: #64748b;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  min-width: 44px;
+  text-align: center;
+}
+
+.position-button:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.position-button.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+.position-button.active:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+/* Special styling for flex positions */
+.position-button[title*="RB/WR/TE"] {
+  background: linear-gradient(135deg, #dcfce7 0%, #dbeafe 50%, #fef3c7 100%);
+  color: #374151;
+}
+
+.position-button[title*="RB/WR/TE"].active {
+  background: #3b82f6;
+  color: white;
+}
+
+.position-button[title*="QB/RB/WR/TE"] {
+  background: linear-gradient(135deg, #fee2e2 0%, #dcfce7 25%, #dbeafe 50%, #fef3c7 100%);
+  color: #374151;
+}
+
+.position-button[title*="QB/RB/WR/TE"].active {
+  background: #3b82f6;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .position-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .position-buttons {
+    justify-content: center;
+  }
+  
+  .position-button {
+    font-size: 11px;
+    padding: 5px 8px;
+    min-width: 38px;
+  }
+}

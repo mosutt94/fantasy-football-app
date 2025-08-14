@@ -1,0 +1,91 @@
+/**
+ * EditableCell Component Styles
+ */
+
+.editable-cell {
+  position: relative;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.editable-cell.clickable {
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+  border: 1px solid transparent;
+  margin: 1px;
+}
+
+.editable-cell.clickable:hover {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.cell-value {
+  flex: 1;
+  color: #374151;
+  font-weight: 500;
+}
+
+.edit-icon {
+  opacity: 0;
+  font-size: 12px;
+  margin-left: 8px;
+  transition: opacity 0.2s;
+}
+
+.editable-cell.clickable:hover .edit-icon {
+  opacity: 0.6;
+}
+
+/* Editing State */
+.editable-cell.editing {
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  background: #f8fafc;
+  border: 1px solid #3b82f6;
+  border-radius: 3px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-input {
+  flex: 1;
+  padding: 4px 6px;
+  border: none;
+  border-radius: 2px;
+  font-size: 14px;
+  background: white;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+/* Empty state styling */
+.editable-cell .cell-value:empty::before {
+  content: attr(data-placeholder);
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* Numeric cell styling */
+.editable-cell .cell-value[data-type="number"] {
+  text-align: right;
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 768px) {
+  .edit-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
