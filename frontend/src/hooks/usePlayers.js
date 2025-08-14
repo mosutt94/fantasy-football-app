@@ -5,7 +5,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { playerApi } from '../services/api';
 
-const FANTASY_POSITIONS = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
+const FANTASY_POSITIONS = ['QB', 'RB', 'WR', 'TE', 'K', 'DEF'];
 
 export const usePlayers = () => {
   const [players, setPlayers] = useState([]);
@@ -101,7 +101,30 @@ export const usePlayers = () => {
   const sortedPlayers = useMemo(() => {
     if (!sortConfig.key) return filteredPlayers;
 
-    return [...filteredPlayers].sort((a, b) => {
+    // If sorting by rank fields, we need to calculate rankings first
+    let playersToSort = filteredPlayers;
+    if (sortConfig.key === 'overallRank' || sortConfig.key === 'positionRank') {
+      const positionCounts = {};
+      playersToSort = filteredPlayers.map((player, index) => {
+        // Overall ranking
+        const overallRank = index + 1;
+        
+        // Position ranking
+        if (!positionCounts[player.position]) {
+          positionCounts[player.position] = 0;
+        }
+        positionCounts[player.position]++;
+        const positionRank = positionCounts[player.position];
+
+        return {
+          ...player,
+          overallRank,
+          positionRank
+        };
+      });
+    }
+
+    return [...playersToSort].sort((a, b) => {
       let aValue = a[sortConfig.key];
       let bValue = b[sortConfig.key];
 
@@ -133,6 +156,16 @@ export const usePlayers = () => {
    * Add rankings to sorted players
    */
   const rankedPlayers = useMemo(() => {
+    // If we're sorting by rank fields, the rankings are already calculated
+    if (sortConfig.key === 'overallRank' || sortConfig.key === 'positionRank') {
+      return sortedPlayers.map((player) => ({
+        ...player,
+        // Include pending changes if they exist
+        ...pendingChanges.get(player.id)
+      }));
+    }
+
+    // Otherwise, calculate rankings based on current sort order
     const positionCounts = {};
     
     return sortedPlayers.map((player, index) => {
@@ -154,7 +187,7 @@ export const usePlayers = () => {
         ...pendingChanges.get(player.id)
       };
     });
-  }, [sortedPlayers, pendingChanges]);
+  }, [sortedPlayers, sortConfig.key, pendingChanges]);
 
   /**
    * Get paginated players
@@ -218,13 +251,18 @@ export const usePlayers = () => {
     try {
       const { playerApi } = await import('../services/api');
       await playerApi.updatePlayer(playerId, { favorited: isFavorited });
-      // Refetch data to update the display
-      fetchPlayers();
+      
+      // Update local state instead of refetching all data
+      setPlayers(prev => prev.map(player => 
+        player.id === playerId 
+          ? { ...player, favorited: isFavorited }
+          : player
+      ));
     } catch (error) {
       console.error('Failed to toggle favorite:', error);
       alert('Failed to update favorite status. Please try again.');
     }
-  }, [fetchPlayers]);
+  }, []);
 
   /**
    * Remove pending change for a player

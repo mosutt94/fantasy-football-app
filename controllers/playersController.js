@@ -33,10 +33,10 @@ const getPlayers = async (req, res) => {
         active
       FROM players 
       WHERE active = true 
-        AND position IN ('QB', 'RB', 'WR', 'TE', 'K', 'DST')
+        AND position IN ('QB', 'RB', 'WR', 'TE', 'K', 'DEF')
         AND auction_value >= 1
       ORDER BY auction_value DESC NULLS LAST
-      LIMIT 200
+      LIMIT 300
     `;
     
     const result = await pool.query(query);

@@ -15,7 +15,7 @@ const PositionFilters = ({ selectedPosition, onPositionChange }) => {
     { key: 'Flex', label: 'Flex', description: 'RB/WR/TE' },
     { key: 'Superflex', label: 'Superflex', description: 'QB/RB/WR/TE' },
     { key: 'K', label: 'K', description: 'Kickers' },
-    { key: 'DST', label: 'DST', description: 'Defense/Special Teams' }
+    { key: 'DEF', label: 'DEF', description: 'Defense/Special Teams' }
   ];
 
   return (
