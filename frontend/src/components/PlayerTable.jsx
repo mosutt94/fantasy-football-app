@@ -9,6 +9,7 @@ import PositionFilters from './PositionFilters';
 import TeamFilter from './TeamFilter';
 import PaginationControls from './PaginationControls';
 import EditableCell from './EditableCell';
+import FavoriteButton from './FavoriteButton';
 import './PlayerTable.css';
 
 const PlayerTable = () => {
@@ -27,7 +28,8 @@ const PlayerTable = () => {
     addPendingChange,
     savePendingChanges,
     clearPendingChanges,
-    refetch
+    refetch,
+    toggleFavorite
   } = usePlayers();
 
 
@@ -95,6 +97,13 @@ const PlayerTable = () => {
             selectedTeam={filters.team}
             onTeamChange={(team) => updateFilter('team', team)}
           />
+          <button
+            className={`favorites-filter-btn ${filters.favorites ? 'active' : ''}`}
+            onClick={() => updateFilter('favorites', !filters.favorites)}
+            title={filters.favorites ? 'Show all players' : 'Show only favorites'}
+          >
+            {filters.favorites ? '★' : '☆'} Favorites
+          </button>
         </div>
       </div>
 
@@ -109,6 +118,9 @@ const PlayerTable = () => {
         <table className="player-table">
           <thead>
             <tr>
+              <th className="favorite-header">
+                ★
+              </th>
               <th 
                 onClick={() => handleSort('overallRank')}
                 className={`sortable ${sortConfig.key === 'overallRank' ? 'sorted' : ''}`}
@@ -162,6 +174,13 @@ const PlayerTable = () => {
           <tbody>
             {players.map((player) => (
               <tr key={player.id} className="player-row">
+                <td className="favorite-cell">
+                  <FavoriteButton
+                    isFavorited={player.favorited || false}
+                    onToggle={toggleFavorite}
+                    playerId={player.id}
+                  />
+                </td>
                 <td className="rank-cell">{player.overallRank}</td>
                 <td className="rank-cell">{player.positionRank}</td>
                 <td className="name-cell">

@@ -29,6 +29,7 @@ const getPlayers = async (req, res) => {
         yahoo_value,
         bye_week,
         tier,
+        favorited,
         active
       FROM players 
       WHERE active = true 
@@ -173,16 +174,16 @@ const getPlayersByPosition = async (req, res) => {
 };
 
 /**
- * Update a player's tier, auction_value, and yahoo_value
+ * Update a player's tier, auction_value, yahoo_value, or favorited status
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
 const updatePlayer = async (req, res) => {
   try {
     const { id } = req.params;
-    const { tier, auction_value, yahoo_value } = req.body;
+    const { tier, auction_value, yahoo_value, favorited } = req.body;
     
-    console.log(`📝 Updating player ID: ${id}`, { tier, auction_value, yahoo_value });
+    console.log(`📝 Updating player ID: ${id}`, { tier, auction_value, yahoo_value, favorited });
     
     // Validate input
     if (!id || isNaN(parseInt(id))) {
@@ -212,6 +213,11 @@ const updatePlayer = async (req, res) => {
       values.push(yahoo_value);
     }
     
+    if (favorited !== undefined && favorited !== null) {
+      updateFields.push(`favorited = $${paramCounter++}`);
+      values.push(favorited);
+    }
+    
     if (updateFields.length === 0) {
       return res.status(400).json({
         success: false,
@@ -239,6 +245,7 @@ const updatePlayer = async (req, res) => {
         yahoo_value,
         bye_week,
         tier,
+        favorited,
         active
     `;
     

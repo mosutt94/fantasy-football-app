@@ -4,20 +4,22 @@
 
 .editable-cell {
   position: relative;
-  min-height: 32px;
+  min-height: 28px;
   display: flex;
   align-items: center;
-  width: 100%;
+  width: auto;
   box-sizing: border-box;
 }
 
 .editable-cell.clickable {
   cursor: pointer;
-  padding: 4px 6px;
+  padding: 3px 6px;
   border-radius: 3px;
   transition: background-color 0.2s;
   border: 1px solid transparent;
-  margin: 1px;
+  margin: 2px;
+  min-width: 40px;
+  text-align: center;
 }
 
 .editable-cell.clickable:hover {
@@ -26,21 +28,13 @@
 }
 
 .cell-value {
-  flex: 1;
   color: #374151;
   font-weight: 500;
+  display: block;
+  text-align: center;
 }
 
-.edit-icon {
-  opacity: 0;
-  font-size: 12px;
-  margin-left: 8px;
-  transition: opacity 0.2s;
-}
 
-.editable-cell.clickable:hover .edit-icon {
-  opacity: 0.6;
-}
 
 /* Editing State */
 .editable-cell.editing {
@@ -50,18 +44,18 @@
   background: #f8fafc;
   border: 1px solid #3b82f6;
   border-radius: 3px;
-  width: 100%;
+  width: auto;
   box-sizing: border-box;
 }
 
 .edit-input {
-  flex: 1;
-  padding: 4px 6px;
+  width: 50px;
+  padding: 3px 6px;
   border: none;
-  border-radius: 2px;
+  border-radius: 3px;
   font-size: 14px;
   background: white;
-  width: 100%;
+  text-align: center;
   box-sizing: border-box;
 }
 

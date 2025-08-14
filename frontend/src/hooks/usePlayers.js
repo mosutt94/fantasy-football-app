@@ -14,7 +14,8 @@ export const usePlayers = () => {
   const [filters, setFilters] = useState({
     position: '',
     team: '',
-    search: ''
+    search: '',
+    favorites: false
   });
   const [sortConfig, setSortConfig] = useState({
     key: 'auction_value',
@@ -84,6 +85,11 @@ export const usePlayers = () => {
         p.first_name?.toLowerCase().includes(searchLower) ||
         p.last_name?.toLowerCase().includes(searchLower)
       );
+    }
+
+    // Favorites filter
+    if (filters.favorites) {
+      filtered = filtered.filter(p => p.favorited === true);
     }
 
     return filtered;
@@ -206,6 +212,21 @@ export const usePlayers = () => {
   }, []);
 
   /**
+   * Toggle favorite status for a player
+   */
+  const toggleFavorite = useCallback(async (playerId, isFavorited) => {
+    try {
+      const { playerApi } = await import('../services/api');
+      await playerApi.updatePlayer(playerId, { favorited: isFavorited });
+      // Refetch data to update the display
+      fetchPlayers();
+    } catch (error) {
+      console.error('Failed to toggle favorite:', error);
+      alert('Failed to update favorite status. Please try again.');
+    }
+  }, [fetchPlayers]);
+
+  /**
    * Remove pending change for a player
    */
   const removePendingChange = useCallback((playerId) => {
@@ -306,6 +327,7 @@ export const usePlayers = () => {
     removePendingChange,
     savePendingChanges,
     clearPendingChanges,
-    refetch: fetchPlayers
+    refetch: fetchPlayers,
+    toggleFavorite
   };
 };

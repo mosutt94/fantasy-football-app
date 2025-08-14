@@ -75,7 +75,6 @@ const EditableCell = ({
       <span className="cell-value">
         {displayValue}
       </span>
-      <span className="edit-icon">✏️</span>
     </div>
   );
 };
